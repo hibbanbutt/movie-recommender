@@ -19,6 +19,10 @@ def main():
     kmeans.fit(feature_vector)
     movies['Cluster'] = kmeans.predict(feature_vector)
 
+    # Save the movies to a CSV file
+    movies.to_csv('movies.csv', index=False)
+
+
     print(movies)
 
 
