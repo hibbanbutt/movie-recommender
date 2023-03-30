@@ -6,7 +6,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import MultiLabelBinarizer
 
 # Load the movies dataset
-movies = pd.read_csv('movies.csv')
+movies = pd.read_csv('../movies.csv')
 
 # Convert the string representation of the Genres list in each row to an actual list of genres
 # 1. Remove the square brackets using strip("[]")
@@ -41,6 +41,3 @@ plt.xlabel('Cluster')
 plt.ylabel('Count')
 plt.show()
 
-#
-#
-#
