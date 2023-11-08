@@ -1,2 +1,36 @@
-# movie-recommender
-A movie recommendation app using Data Mining principles. Based on the MovieLens 1M dataset. 
+# How to Use
+
+# Introduction
+Our project consists of experimentation and an implementation in the form of  a Python CLI application. The purpose of the application is to serve as a movie recommender for early 2000s and pre-2000s movies. This can allow for user interaction where, if they provide demographic details, they are suggested a shuffled list of 100 movies they can iterate through. This list is generated using a combination of clustering and matrix completion techniques in our attempt to provide recommendations that are personalized and balanced. The experimentation in which (relatively) optimal clustering strategies and configurations were achieved was done by Ahmed Al Hikmani, while the application aspect was implemented by Hibban Butt. Data sourcing, collection, and structural analysis was all done jointly.
+
+# Problem and Motivation
+Our project's primary motivation is to develop a personalized movie recommendation system that not only caters to individual tastes but also promotes lesser-known movies from the early 2000s and pre-2000s era. We focus on these movies for several reasons: to rekindle nostalgia associated with those periods, introduce users to hidden gems not typically prioritized by mainstream algorithms, and provide a more diverse selection of content that encompasses different themes, perspectives, and values from various eras.
+
+To generate these personalized recommendations, our project combines clustering and matrix completion techniques. We apply a clustering algorithm to the movies' genres and plot descriptions, while Non-Negative Matrix Factorization (NMF) is used to complete the user-movie ratings matrix. The application then filters the recommendations based on the user's age, gender, occupation, and location, ensuring that the suggestions are tailored to their specific preferences and demographic. This approach aims to broaden users' cinematic horizons and encourage the exploration of various genres and styles from the early 2000s and pre-2000s movies.
+
+# Data Source
+The dataset which served as the basis for our application and data mining operations was the MovieLens 1M Dataset. The dataset is split into three subsets: Ratings, Movies, and Users. The dataset contains over one million movie ratings of almost four thousand movies by more than six thousand users. The movies dataset has the structure: MovieID, Title, and Genres. The ratings dataset has the structure: UserID, MovieID, Rating, and Timestamp. Finally, the users dataset has fields UserID, Gender, Age, Occupation, and Zip-code.
+
+#App Design
+	The application Hibban developed consists of a series of steps that make up the entire recommendation algorithm. First, the data is loaded in and movies are clustered based on the vectorized TF-IDF descriptions. Cluster IDs are assigned to every movie.
+ 
+Once clustering is complete, we then conduct matrix completion by first creating a matrix of all users and their associated ratings and using Scikit Learn’s Non-Negative Matrix Factorization (NMF) to generate a new “completed” matrix. This completed matrix turns our once-sparse vector into a completely full vector of ratings for every possible user and movie combination. Not all of the completed columns had an even spread between 1 and 5, and not all were integers. But the purpose was not to generate absolute ratings but to generate a relative understanding for each user of how much they liked each movie relative to each other. This means that if we had a max rating of 1.3 and minimum of 0.7, the movie with the 1.3 rating was their favorite movie, 0.7 was their most disliked movie, and anything in between scaled appropriately. This is all we needed to understand which movies any given user was most likely to enjoy, and did not depend on the same absoluteness of a five-star rating.
+
+Then the user-matching process begins. To use the user’s demographic details in the recommender, we use a coarse equality check to find all users with the exact same age, gender, occupation, and general region in the US. We pick the general region by using the first digit of the zip-code field in both the user provided data and the users dataset and check for rows where all those columns match. Generally speaking, all configurations we tested had provided us with at least one matching dataset user. But in the rare case it doesn’t, we provided fallback where if there was no match found, the app will keep iterating through all possible geographical US regions until a match is found, making this field more negotiable in the worst-case. Age, gender, and occupation were non-negotiables because in our judgment, they seem to be the most impactful on what a user may want to watch, where the region was less so. Additionally, whenever there are multiple matching users, which is typically the case, we match with whoever has the most ratings. Matching with whoever has the most ratings allows us the closest matching to the raw dataset, which shines through even the completed version of the matrix. It is more biased to reality, which is what we want to preserve as much as possible. 
+
+Once a user is matched to the most similar or ideal user, according to our parameters, we simply take the corresponding user ID and key into the completed matrix to retrieve all the ratings for that user. We then sort in descending order, as our goal is to retrieve the top 100 most highly rated movies for that user. But the caveat is that Hibban did not simply take the top 100, but used the clusters to evenly distribute the recommendations within 100 movies. This means to take the top 100/n clusters, where n is the number of clusters, for each cluster ID’s matching movies in the ratings column.
+Finally, this resulting list is shuffled and presented to the user in the CLI, where they are randomly given a movie everytime they use the “next” input key. The actuality  behind this is that they are just iterating through a list that was randomized. 
+
+# Conclusion
+In our application, clustering was performed using the KMeans algorithm from the Scikit-learn library. The algorithm was applied to the movies' genres and plot descriptions, which were vectorized using the TfidfVectorizer. Based on our experiments, we chose a configuration of four clusters, which provided a balanced and meaningful grouping of movies.
+
+The Non-Negative Matrix Factorization (NMF) process played a crucial role in generating personalized recommendations. NMF was used to decompose and complete the user-movie ratings matrix, resulting in a completed matrix that estimated users' ratings for all movies. This allowed us to predict user preferences and generate tailored recommendations based on their estimated ratings.
+
+During the application design and development process, we faced challenges in handling missing values, outliers, and inconsistencies in the dataset. By implementing a thorough data cleaning and preprocessing pipeline, we were able to overcome these issues and ensure the quality of our data for analysis.
+
+In conclusion, our project successfully combines clustering and NMF techniques to provide personalized movie recommendations, focusing on lesser-known movies from the early 2000s and pre-2000s era. The application's design and development process involved overcoming various challenges related to data quality, and our approach demonstrates the potential for uncovering hidden gems and promoting diverse content through tailored recommendations.
+
+
+
+
+
