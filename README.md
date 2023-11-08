@@ -1,4 +1,5 @@
 # How to Use
+Simply execute movie-recommender2.py to use the final product (post-experimentation). Ensure that all data files are located correctly relative to the app.
 
 # Introduction
 Our project consists of experimentation and an implementation in the form of  a Python CLI application. The purpose of the application is to serve as a movie recommender for early 2000s and pre-2000s movies. This can allow for user interaction where, if they provide demographic details, they are suggested a shuffled list of 100 movies they can iterate through. This list is generated using a combination of clustering and matrix completion techniques in our attempt to provide recommendations that are personalized and balanced. The experimentation in which (relatively) optimal clustering strategies and configurations were achieved was done by Ahmed Al Hikmani, while the application aspect was implemented by Hibban Butt. Data sourcing, collection, and structural analysis was all done jointly.
